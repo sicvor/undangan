@@ -6,7 +6,10 @@
   const adegan = $("#adegan");
   const segel = $("#segel");
   const ajakan = $("#ajakan");
-  const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const params0 = new URLSearchParams(location.search);
+  // ?gerak=penuh memaksa animasi penuh walau "Kurangi Gerakan" aktif (untuk uji)
+  const kurangiGerak = params0.get("gerak") !== "penuh" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.OPENING_KURANGI_GERAK = kurangiGerak;
   const params = new URLSearchParams(location.search);
   const DIR = "assets/intro/web/";
 
