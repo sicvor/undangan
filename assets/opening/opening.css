@@ -1,0 +1,168 @@
+:root {
+  --kertas: #c9cfb2;
+  --ivory: #fbf7ee;
+  --mawar: #9c4357;
+  --mawar-tua: #7d3045;
+  --teks: #4a3d35;
+  --skrip: "Pinyon Script", cursive;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --lebar-maks: 480px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--serif);
+  color: var(--teks);
+  background: #e9e6da;
+  -webkit-tap-highlight-color: transparent;
+}
+body.tertutup { overflow: hidden; height: 100svh; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- panggung ---------- */
+#opening {
+  position: relative;
+  width: 100%;
+  max-width: var(--lebar-maks);
+  height: 100vh;      /* cadangan browser lama */
+  height: 100svh;
+  margin: 0 auto;
+  overflow: hidden;
+  container-type: size;   /* cqw/cqh = % lebar/tinggi panggung */
+  background: var(--kertas);
+  isolation: isolate;
+}
+.adegan { position: absolute; inset: 0; }
+.layer {
+  position: absolute;
+  display: block;
+  height: auto;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.layer.cover { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; transform-origin: 50% 70%; }
+
+/* kabut ivory di belakang teks */
+.kabut {
+  position: absolute; inset: 0; z-index: 8; pointer-events: none;
+  background:
+    radial-gradient(ellipse 62cqw 22cqh at 50% 36cqh, rgba(251,247,238,.92) 0%, rgba(251,247,238,.75) 45%, rgba(251,247,238,0) 100%);
+}
+
+/* ---------- teks ---------- */
+.teks {
+  position: absolute; z-index: 9; left: 6cqw; right: 6cqw;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.judul {
+  margin: 0 0 1.2cqh;
+  font-size: clamp(15px, 4.8cqw, 22px); font-weight: 600; letter-spacing: .06em;
+  color: var(--mawar);
+}
+.nama { margin: 0; font-weight: 400; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.nama .baris {
+  font-family: var(--skrip);
+  font-size: var(--ukuran-nama, 15cqw);
+  color: var(--mawar);
+  white-space: nowrap;
+  padding: 0 .12em;          /* ruang untuk ekor huruf skrip */
+  text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 0 18px rgba(251,247,238,.9);
+}
+.nama .dan {
+  font-family: var(--skrip); font-size: 11cqw; color: #a0684a; margin: -0.5cqh 0 0.3cqh; text-shadow: 0 0 12px rgba(251,247,238,.9);
+}
+.judul, .nama .baris, .nama .dan { display: block; will-change: opacity, filter, transform; }
+
+/* ---------- petunjuk scroll ---------- */
+.petunjuk {
+  position: absolute; z-index: 12; left: 50%; bottom: max(2.5cqh, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  padding: 6px 16px 4px; border-radius: 999px;
+  background: rgba(251,247,238,.82); color: var(--mawar-tua);
+  font-size: 14px; font-weight: 600; letter-spacing: .08em; text-decoration: none;
+  box-shadow: 0 6px 18px -10px rgba(60,40,30,.6);
+}
+.petunjuk svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; animation: pantul 1.6s ease-in-out infinite; }
+@keyframes pantul { 50% { transform: translateY(4px); } }
+
+/* ---------- amplop ---------- */
+.amplop { position: absolute; inset: 0; z-index: 20; }
+body.selesai-buka .amplop { visibility: hidden; }
+.pocket, .flap { position: absolute; inset: 0; will-change: transform; }
+.flap { transform-origin: 50% 0; z-index: 2; pointer-events: none; }
+.pocket { z-index: 1; }
+.bayang { position: absolute; inset: 0; filter: drop-shadow(0 0 3px rgba(40,50,25,.28)); }
+.bayang-flap { filter: drop-shadow(0 5px 6px rgba(40,50,25,.35)) drop-shadow(0 1px 1px rgba(40,50,25,.3)); }
+.kertas {
+  position: absolute; inset: 0;
+  background: url("../intro/web/paper-sage.webp") center / cover no-repeat var(--kertas);
+}
+.kertas::after { content: ""; position: absolute; inset: 0; }
+/* ujung flap & lekukan kantong mengikuti posisi segel (--sy) */
+.sisi-kiri  { clip-path: polygon(0 0, 50% calc(var(--sy) - 3cqh), 0 100%); }
+.sisi-kanan { clip-path: polygon(100% 0, 50% calc(var(--sy) - 3cqh), 100% 100%); }
+.bawah      { clip-path: polygon(0 100%, 50% calc(var(--sy) - 6cqh), 100% 100%); }
+.tutup      { clip-path: polygon(0 0, 100% 0, 50% var(--sy)); }
+.sisi-kiri::after  { background: linear-gradient(90deg, rgba(30,40,20,.10), rgba(30,40,20,0) 70%); }
+.sisi-kanan::after { background: linear-gradient(270deg, rgba(30,40,20,.10), rgba(30,40,20,0) 70%); }
+.bawah::after      { background: linear-gradient(0deg, rgba(255,255,255,.08), rgba(30,40,20,.06)); }
+.tutup::after      { background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%, rgba(30,40,20,.05)); }
+
+.ajakan {
+  position: absolute; left: 0; right: 0; top: calc(var(--sy) + var(--sw) * .62);
+  margin: 0; text-align: center;
+  font-size: 15px; font-weight: 600; letter-spacing: .06em; color: #3f4a2c;
+  text-shadow: 0 1px 0 rgba(255,255,255,.35);
+}
+
+.segel {
+  position: absolute; left: 50%; top: var(--sy);
+  width: var(--sw); aspect-ratio: 491 / 520;
+  translate: -50% -50%;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 8px rgba(60,20,25,.35));
+  will-change: transform;
+}
+.segel img { width: 100%; height: 100%; display: block; pointer-events: none; }
+.segel .inisial {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--skrip); font-size: calc(var(--sw) * .3); line-height: 1; padding-top: 4%;
+  color: #8a3c4a;
+  text-shadow: 0 1px 0 rgba(255,220,220,.45), 0 -1px 0 rgba(70,15,25,.35);
+  pointer-events: none;
+}
+.segel .inisial small { font-size: .55em; margin: 0 .08em; }
+.segel:disabled { cursor: progress; }
+.segel:not(:disabled) { animation: denyut 2.4s ease-in-out infinite; }
+body.membuka .segel { animation: none; }
+@keyframes denyut { 50% { filter: drop-shadow(0 8px 14px rgba(120,30,45,.45)); } }
+.segel:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+
+/* ---------- detail ---------- */
+.detail {
+  max-width: var(--lebar-maks); margin: 0 auto; min-height: 70svh;
+  padding: 72px 28px; text-align: center; background: var(--ivory);
+}
+.detail .kecil { letter-spacing: .25em; text-transform: uppercase; font-size: 13px; margin: 0; }
+.detail h2 { font-family: var(--skrip); font-weight: 400; font-size: 46px; color: var(--mawar); margin: 8px 0; }
+
+/* ---------- panel review ---------- */
+.review[hidden] { display: none; }
+.review {
+  position: fixed; z-index: 100; left: 8px; right: 8px; bottom: 8px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center;
+  padding: 8px; border-radius: 12px; background: rgba(20,20,20,.82); color: #fff;
+  font: 13px/1.2 system-ui, sans-serif;
+}
+.review button { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #666; background: #2b2b2b; color: #fff; cursor: pointer; }
+.review button[aria-pressed="true"] { background: #9c4357; border-color: #9c4357; }
+.review input { flex: 1 1 160px; }
+.review output { min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; }

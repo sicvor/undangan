@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Undangan Pernikahan</title>
+  <meta name="theme-color" content="#c9cfb2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <!-- Preload gambar yang muncul paling awal -->
+  <link rel="preload" as="image" href="assets/intro/web/paper-sage.webp">
+  <link rel="preload" as="image" href="assets/intro/web/wax-seal.webp">
+  <link rel="preload" as="image" href="assets/intro/web/tree-left.webp">
+  <link rel="preload" as="image" href="assets/intro/web/tree-right.webp">
+  <link rel="preload" as="image" href="assets/intro/web/tree-lower-left.webp">
+  <link rel="preload" as="image" href="assets/intro/web/tree-lower-right.webp">
+  <link rel="stylesheet" href="assets/opening/opening.css">
+</head>
+<body class="tertutup">
+
+  <section id="opening" aria-label="Pembuka undangan">
+    <!-- Adegan: layer gambar dibuat oleh opening.js dari config.js -->
+    <div class="adegan" id="adegan">
+      <div class="kabut" data-el="kabut"></div>
+      <div class="teks" id="teks">
+        <p class="judul" data-el="judul" data-isi="judulKecil"></p>
+        <h1 class="nama">
+          <span class="baris" data-el="nama1" data-isi="namaPertama"></span>
+          <span class="dan" data-el="dan" aria-hidden="true">&amp;</span>
+          <span class="visually-hidden"> dan </span>
+          <span class="baris" data-el="nama2" data-isi="namaKedua"></span>
+        </h1>
+      </div>
+      <a class="petunjuk" data-el="petunjuk" href="#detail" tabindex="-1" aria-hidden="true">
+        <span data-isi="petunjukScroll"></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+
+    <!-- Amplop -->
+    <div class="amplop" id="amplop">
+      <div class="pocket" data-el="pocket">
+        <div class="bayang"><div class="kertas sisi-kiri"></div></div>
+        <div class="bayang"><div class="kertas sisi-kanan"></div></div>
+        <div class="bayang"><div class="kertas bawah"></div></div>
+        <p class="ajakan" id="ajakan">Memuat…</p>
+      </div>
+      <div class="flap" data-el="flap">
+        <div class="bayang bayang-flap"><div class="kertas tutup"></div></div>
+        <button class="segel" id="segel" data-el="seal" type="button" disabled aria-busy="true" aria-label="Buka Undangan">
+          <img src="assets/intro/web/wax-seal.webp" alt="" draggable="false">
+          <span class="inisial" id="inisial"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="detail" class="detail">
+    <p class="kecil">Detail acara</p>
+    <h2>Segera hadir</h2>
+    <p>Bagian ini disiapkan pada tahap berikutnya.</p>
+  </section>
+
+  <!-- Panel review: buka dengan ?review (tombol 1/2/3 di keyboard juga bisa) -->
+  <div class="review" id="review" hidden>
+    <button type="button" data-state="tertutup">1 · Amplop</button>
+    <button type="button" data-state="villa">2 · Villa</button>
+    <button type="button" data-state="akhir">3 · Akhir</button>
+    <button type="button" data-aksi="putar">▶ Putar</button>
+    <button type="button" data-aksi="lambat">▶ 0,25×</button>
+    <input type="range" id="geser" min="0" max="8.5" step="0.05" value="0" aria-label="Posisi timeline">
+    <output id="waktu">0,00 dtk</output>
+  </div>
+
+  <script src="assets/opening/config.js"></script>
+  <script src="assets/opening/opening.js"></script>
+</body>
+</html>

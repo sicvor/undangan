@@ -50,3 +50,15 @@ python3 -m http.server 8000
 ```
 
 lalu buka http://localhost:8000/?to=Tamu
+
+## Opening interaktif (tahap uji)
+
+Halaman: `opening.html` → https://sicvor.github.io/undangan/opening.html
+
+- **Ganti nama & inisial**: bagian paling atas `assets/opening/config.js`.
+- **Posisi, ukuran, urutan layer** dan **timing animasi**: juga di `assets/opening/config.js`.
+- **Mode review**: tambahkan `?review` di belakang link → panel untuk lompat ke
+  *Amplop* / *Villa* / *Akhir* (atau tombol 1/2/3), putar ulang, gerak lambat 0,25×, dan geser timeline.
+  Bisa juga langsung `?state=tertutup`, `?state=villa`, `?state=akhir`.
+- Aset asli ada di `assets/intro/`; halaman memakai versi WebP yang dikecilkan di `assets/intro/web/`
+  (±3,4 MB total, dari 28 MB). Kalau mengganti PNG asli, buat ulang WebP-nya.
