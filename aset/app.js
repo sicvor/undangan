@@ -47,9 +47,12 @@
     }
     bingkai.append(isi);
     kartu.append(bingkai, buat("h3", "nama-skrip", m.panggilan));
-    kartu.append(buat("p", "nama-lengkap", m.nama));
-    kartu.append(buat("p", "label-kecil", m.keterangan));
-    kartu.append(buat("p", null, `${m.ayah} & ${m.ibu}`));
+    if (m.nama && m.nama !== m.panggilan) kartu.append(buat("p", "nama-lengkap", m.nama));
+    const ortu = [m.ayah, m.ibu].filter(Boolean).join(" & ");
+    if (ortu) {
+      if (m.keterangan) kartu.append(buat("p", "label-kecil", m.keterangan));
+      kartu.append(buat("p", null, ortu));
+    }
     if (m.instagram) {
       const a = buat("a", "tombol garis kecil", "@" + m.instagram);
       a.href = "https://instagram.com/" + encodeURIComponent(m.instagram);
@@ -127,7 +130,8 @@
       const k = buat("div", "kartu rekening ungkap");
       k.append(buat("p", "bank", b.bank));
       const no = buat("p", "nomor", b.nomor); no.id = "rek" + i;
-      k.append(no, buat("p", null, "a.n. " + b.atasNama));
+      k.append(no);
+      if (b.atasNama) k.append(buat("p", null, "a.n. " + b.atasNama));
       const t = buat("button", "tombol garis kecil", "Salin nomor");
       t.dataset.salinDari = "rek" + i;
       k.append(t);
@@ -198,6 +202,7 @@
 
   /* ---------- RSVP & ucapan ---------- */
   const form = $("#formRsvp"), pesan = $("#pesanRsvp");
+  if (!D.rsvpGoogleScript && !D.rsvpWhatsApp) sembunyi("rsvp");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
