@@ -36,15 +36,15 @@ body.tertutup { overflow: hidden; height: 100svh; }
 .adegan { position: absolute; inset: 0; }
 .layer {
   position: absolute;
-  display: block;
-  height: auto;
-  max-width: none;
-  user-select: none;
   pointer-events: none;
+  user-select: none;
   will-change: transform;
-  backface-visibility: hidden;
 }
-.layer.cover { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; transform-origin: 50% 70%; }
+.layer img { display: block; width: 100%; height: auto; max-width: none; will-change: transform; backface-visibility: hidden; }
+.layer .pita { position: absolute; left: 0; top: 0; transform-origin: 50% 100%; }
+.layer .pita.pertama { position: relative; }
+.layer.cover { inset: 0; transform-origin: 50% 70%; }
+.layer.cover img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
 
 /* kabut ivory di belakang teks */
 .kabut {
@@ -97,22 +97,23 @@ body.selesai-buka .amplop { visibility: hidden; }
 .pocket, .flap { position: absolute; inset: 0; will-change: transform; }
 .flap { transform-origin: 50% 0; z-index: 2; pointer-events: none; }
 .pocket { z-index: 1; }
-.bayang { position: absolute; inset: 0; filter: drop-shadow(0 0 3px rgba(40,50,25,.28)); }
-.bayang-flap { filter: drop-shadow(0 5px 6px rgba(40,50,25,.35)) drop-shadow(0 1px 1px rgba(40,50,25,.3)); }
+.bayang { position: absolute; inset: 0; filter: drop-shadow(0 -1px 2px rgba(40,50,25,.18)); }
+.bayang-flap { filter: drop-shadow(0 4px 7px rgba(40,50,25,.32)) drop-shadow(0 1px 1px rgba(40,50,25,.25)); }
 .kertas {
   position: absolute; inset: 0;
   background: url("../intro/web/paper-sage.webp") center / cover no-repeat var(--kertas);
 }
 .kertas::after { content: ""; position: absolute; inset: 0; }
 /* ujung flap & lekukan kantong mengikuti posisi segel (--sy) */
-.sisi-kiri  { clip-path: polygon(0 0, 50% calc(var(--sy) - 3cqh), 0 100%); }
-.sisi-kanan { clip-path: polygon(100% 0, 50% calc(var(--sy) - 3cqh), 100% 100%); }
-.bawah      { clip-path: polygon(0 100%, 50% calc(var(--sy) - 6cqh), 100% 100%); }
-.tutup      { clip-path: polygon(0 0, 100% 0, 50% var(--sy)); }
-.sisi-kiri::after  { background: linear-gradient(90deg, rgba(30,40,20,.10), rgba(30,40,20,0) 70%); }
-.sisi-kanan::after { background: linear-gradient(270deg, rgba(30,40,20,.10), rgba(30,40,20,0) 70%); }
-.bawah::after      { background: linear-gradient(0deg, rgba(255,255,255,.08), rgba(30,40,20,.06)); }
-.tutup::after      { background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%, rgba(30,40,20,.05)); }
+/* kantong = satu lembar dengan takik V; flap = segitiga pendek, ujungnya di segel (--sy) */
+.kantong { clip-path: polygon(0 0, 50% calc(var(--sy) - 1.5cqh), 100% 0, 100% 100%, 0 100%); }
+.tutup   { clip-path: polygon(0 0, 100% 0, 50% var(--sy)); }
+.kantong::after {
+  background:
+    linear-gradient(180deg, rgba(30,40,20,.10), rgba(30,40,20,0) 22%),
+    linear-gradient(0deg, rgba(30,40,20,.10), rgba(30,40,20,0) 35%);
+}
+.tutup::after { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 55%, rgba(30,40,20,.06)); }
 
 .ajakan {
   position: absolute; left: 0; right: 0; top: calc(var(--sy) + var(--sw) * .62);

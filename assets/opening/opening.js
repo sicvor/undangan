@@ -28,23 +28,62 @@
 
   /* ---------- layer gambar ---------- */
   const el = {};
-  for (const [nama, L] of Object.entries(C.layer)) {
+  const G = C.goyang;
+  const gambar = (src) => {
     const img = document.createElement("img");
-    img.src = DIR + L.src + ".webp";
+    img.src = DIR + src + ".webp";
     img.alt = "";
     img.decoding = "async";
-    img.className = "layer" + (L.cover ? " cover" : "");
-    img.style.zIndex = L.z;
+    img.draggable = false;
+    return img;
+  };
+  const goyangan = []; // animasi diam (tak berujung): rumput, bunga, daun
+  for (const [nama, L] of Object.entries(C.layer)) {
+    // wadah menerima gerak timeline; gambar di dalamnya menerima goyangan halus
+    const wadah = document.createElement("div");
+    wadah.className = "layer" + (L.cover ? " cover" : "");
+    wadah.style.zIndex = L.z;
+    if (L.blur) wadah.style.filter = `blur(${L.blur}px)`;
     if (!L.cover) {
-      img.style.left = L.x + "cqw";
-      img.style.top = L.y + "cqh";
-      img.style.width = L.w + "cqw";
-      img.style.translate = `${-L.ax * 100}% ${-L.ay * 100}%`;
-      img.style.transformOrigin = `${L.ax * 100}% ${L.ay * 100}%`;
+      wadah.style.left = L.x + "cqw";
+      wadah.style.top = L.y + "cqh";
+      wadah.style.width = L.w + "cqw";
+      wadah.style.translate = `${-L.ax * 100}% ${-L.ay * 100}%`;
+      wadah.style.transformOrigin = `${L.ax * 100}% ${L.ay * 100}%`;
     }
-    adegan.prepend(img);
-    el[nama] = img;
+    if (L.goyang === "rumput" && G) {
+      // rumput dipotong jadi beberapa pita vertikal bertepi lembut; tiap pita bergoyang
+      // dengan fase berbeda sehingga terlihat seperti angin yang menyapu
+      const n = G.rumput.pita, lebar = 100 / n, f = lebar * 0.45;
+      for (let i = 0; i < n; i++) {
+        const img = gambar(L.src);
+        img.className = i ? "pita" : "pita pertama";
+        const a = i * lebar, b = a + lebar;
+        const kiri = i === 0 ? "#000 0%" : `transparent ${a - f}%, #000 ${a + f}%`;
+        const kanan = i === n - 1 ? "#000 100%" : `#000 ${b - f}%, transparent ${b + f}%`;
+        img.style.webkitMaskImage = img.style.maskImage = `linear-gradient(90deg, ${kiri}, ${kanan})`;
+        wadah.append(img);
+        goyangan.push(img.animate(
+          [{ transform: `skewX(${-G.rumput.sudut}deg)` }, { transform: `skewX(${G.rumput.sudut}deg)` }],
+          { duration: (G.rumput.periode + (i % 3) * 0.45) * 1000, delay: -i * G.rumput.jeda * 1000,
+            direction: "alternate", iterations: Infinity, easing: "ease-in-out" }));
+      }
+    } else {
+      const img = gambar(L.src);
+      wadah.append(img);
+      const g = L.goyang && G && G[L.goyang];
+      if (g) {
+        img.style.transformOrigin = L.goyang === "daun" ? `${L.ax * 100}% 0%` : `${L.ax * 100}% 100%`;
+        goyangan.push(img.animate(
+          [{ transform: `rotate(${-g.sudut}deg)` }, { transform: `rotate(${g.sudut}deg)` }],
+          { duration: g.periode * 1000, delay: -Math.random() * g.periode * 1000,
+            direction: "alternate", iterations: Infinity, easing: "ease-in-out" }));
+      }
+    }
+    adegan.prepend(wadah);
+    el[nama] = wadah;
   }
+  if (kurangiGerak) goyangan.forEach((a) => a.cancel());
   document.querySelectorAll("[data-el]").forEach((n) => { el[n.dataset.el] = n; });
 
   /* ---------- nama: kecilkan otomatis kalau terlalu panjang ---------- */
@@ -72,8 +111,10 @@
   let mulaiPada = null, rafId = 0, putaran = 0;
   const petunjuk = el.petunjuk;
   const petunjukMulai = (C.timeline.find((e) => e.el === "petunjuk") || { t: 0 }).t * 1000;
+  // amplop disembunyikan setelah animasi seal/flap/pocket selesai
+  const amplopSelesai = Math.max(...C.timeline.filter((e) => ["seal", "flap", "pocket"].includes(e.el)).map((e) => (e.t + e.dur) * 1000));
   function aturKelas(ms) {
-    document.body.classList.toggle("selesai-buka", ms >= 1000);
+    document.body.classList.toggle("selesai-buka", ms >= amplopSelesai);
     const tampil = ms >= petunjukMulai;      // petunjuk baru bisa difokus setelah muncul
     petunjuk.tabIndex = tampil ? 0 : -1;
     petunjuk.setAttribute("aria-hidden", String(!tampil));
@@ -137,6 +178,8 @@
     terapkanStateUrl();
   });
   addEventListener("resize", pasNama);
+  // untuk alat review/rekam: geser timeline & akses animasi
+  window.OPENING_DEBUG = { geserKe, anim, goyangan, totalMs };
 
   /* ---------- mode review: ?review atau ?state=tertutup|villa|akhir ---------- */
   const panel = $("#review"), geser = $("#geser"), waktu = $("#waktu");
