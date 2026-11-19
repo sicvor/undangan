@@ -22,6 +22,10 @@
   ini.append(i1, Object.assign(document.createElement("small"), { textContent: "&" }), i2);
   document.title = `The Wedding of ${C.namaPertama} & ${C.namaKedua}`;
 
+  /* ---------- nama tamu dari link (?to=) ---------- */
+  const tamu = (new URLSearchParams(location.search).get("to") || "").replace(/\s+/g, " ").trim().slice(0, 80);
+  $("#namaTamu").textContent = tamu || C.namaTamuBawaan;   // textContent: aman dari kode sisipan
+
   /* ---------- posisi segel, teks ---------- */
   panggung.style.setProperty("--sy", C.segel.y + "cqh");
   panggung.style.setProperty("--sw", C.segel.w + "cqw");

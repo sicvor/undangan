@@ -122,6 +122,27 @@ body.selesai-buka .amplop { visibility: hidden; }
   text-shadow: 0 1px 0 rgba(255,255,255,.35);
 }
 
+/* label alamat: kartu krem di kantong amplop */
+.label-tamu {
+  position: absolute; left: 50%; top: 66cqh; translate: -50% -50%;
+  width: min(80cqw, 360px); padding: 14px 18px 12px;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0)),
+    #f6f1e4;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(40,50,25,.18), 0 8px 18px -10px rgba(40,50,25,.55);
+  outline: 1px solid rgba(160,130,90,.45); outline-offset: -6px;
+}
+.label-tamu p { margin: 0; }
+.label-tamu .sapaan { font-size: 13px; letter-spacing: .06em; color: #6b6553; }
+.label-tamu .nama-tamu {
+  margin: 4px 0 6px; font-size: clamp(20px, 6.2cqw, 27px); font-weight: 600; line-height: 1.2;
+  color: #34402a; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.label-tamu .catatan-tamu { font-size: 11.5px; font-style: italic; color: #857d68; line-height: 1.35; }
+
 .segel {
   position: absolute; left: 50%; top: var(--sy);
   width: var(--sw); aspect-ratio: 491 / 520;

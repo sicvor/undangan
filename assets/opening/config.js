@@ -10,6 +10,12 @@ window.OPENING = {
   inisialPertama: "",
   inisialKedua: "",
   ajakanSegel: "Ketuk segel untuk membuka undangan",
+
+  /* Nama tamu diambil dari link: opening.html?to=Bapak+Budi+Santoso
+     (spasi ditulis +, tanda & ditulis %26). Tanpa ?to= dipakai namaTamuBawaan. */
+  sapaanTamu: "Kepada Yth. Bapak/Ibu/Saudara/i",
+  namaTamuBawaan: "Tamu Undangan",
+  catatanTamu: "Mohon maaf apabila ada kesalahan penulisan nama dan gelar",
   petunjukScroll: "Gulir ke bawah",
 
   /* ---------- 2. POSISI LAYER ----------
